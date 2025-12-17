@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🍌 Nano Bananary
+# 🍌 Nano Bananary Desktop
 
 **AI-Powered Image Editor Desktop App**
 
