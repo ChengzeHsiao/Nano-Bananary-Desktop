@@ -1,6 +1,6 @@
 export default {
   app: {
-    title: "🍌 香蕉超市｜ZHO",
+    title: "🍌 Nano Bananary",
     history: "历史记录",
     back: "返回",
     chooseAnotherEffect: "选择其他效果",
@@ -8,6 +8,7 @@ export default {
     generating: "生成中...",
     result: "结果",
     yourImageWillAppear: "您生成的图像将显示在这里。",
+    settings: "设置",
     error: {
       uploadAndSelect: "请上传图像并选择一个效果。",
       uploadBoth: "请上传两个所需的图像。",
@@ -28,6 +29,20 @@ export default {
         switchToLight: "切换到浅色主题",
         switchToDark: "切换到深色主题"
     }
+  },
+  settings: {
+    title: "设置",
+    apiKeyLabel: "Gemini API 密钥",
+    apiKeyPlaceholder: "输入您的 Gemini API 密钥",
+    apiKeyDescription: "您的 API 密钥仅存储在本地，不会发送到除 Google API 之外的任何服务器。",
+    apiKeyRequired: "使用此应用程序需要 API 密钥。",
+    getApiKey: "从 Google AI Studio 获取您的 API 密钥",
+    save: "保存",
+    cancel: "取消",
+    saved: "设置保存成功！",
+    error: "保存设置失败。",
+    showKey: "显示 API 密钥",
+    hideKey: "隐藏 API 密钥"
   },
   transformationSelector: {
     title: "开始“蕉”虑吧！",

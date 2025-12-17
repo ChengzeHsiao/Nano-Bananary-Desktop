@@ -1,12 +1,26 @@
 
 import { GoogleGenAI, Modality } from "@google/genai";
 import type { GeneratedContent } from '../types';
+import { getApiKey } from './settingsStore';
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable is not set.");
+let aiInstance: GoogleGenAI | null = null;
+let currentApiKey: string | null = null;
+
+async function getAI(): Promise<GoogleGenAI> {
+  const key = await getApiKey();
+  if (!key) {
+    throw new Error("API Key is not configured. Please set your Gemini API Key in Settings.");
+  }
+  
+  // Reuse instance if key hasn't changed
+  if (aiInstance && currentApiKey === key) {
+    return aiInstance;
+  }
+  
+  currentApiKey = key;
+  aiInstance = new GoogleGenAI({ apiKey: key });
+  return aiInstance;
 }
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export async function editImage(
     base64ImageData: string, 
@@ -47,6 +61,7 @@ export async function editImage(
 
     parts.push({ text: fullPrompt });
 
+    const ai = await getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image-preview',
       contents: { parts },
@@ -136,7 +151,8 @@ export async function generateVideo(
                 }
             })
         };
-
+        
+        const ai = await getAI();
         let operation = await ai.models.generateVideos(request);
         
         onProgress("Polling for results, this may take a few minutes...");
@@ -150,13 +166,33 @@ export async function generateVideo(
             throw new Error(operation.error.message || "Video generation failed during operation.");
         }
 
-        const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+        // Debug: log the response structure
+        console.log("Video generation response:", JSON.stringify(operation, null, 2));
 
+        // Try multiple possible paths for the download link
+        let downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+        
+        // Alternative paths that might exist in different API versions
         if (!downloadLink) {
-            throw new Error("Video generation completed, but no download link was found.");
+            downloadLink = (operation as any).response?.videos?.[0]?.uri;
+        }
+        if (!downloadLink) {
+            downloadLink = (operation as any).result?.generatedVideos?.[0]?.video?.uri;
+        }
+        if (!downloadLink) {
+            downloadLink = (operation as any).metadata?.generatedVideos?.[0]?.video?.uri;
         }
 
-        return `${downloadLink}&key=${process.env.API_KEY}`;
+        if (!downloadLink) {
+            // Provide more details about what we received
+            const responseStr = JSON.stringify(operation.response || operation, null, 2);
+            console.error("Full operation response:", responseStr);
+            throw new Error(`Video generation completed, but no download link was found. Response: ${responseStr.substring(0, 500)}`);
+        }
+
+        // Handle URLs that might already have query parameters
+        const separator = downloadLink.includes('?') ? '&' : '?';
+        return `${downloadLink}${separator}key=${currentApiKey}`;
 
     } catch (error) {
         console.error("Error calling Video Generation API:", error);

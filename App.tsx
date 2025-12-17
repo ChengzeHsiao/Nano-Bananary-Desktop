@@ -14,6 +14,8 @@ import HistoryPanel from './components/HistoryPanel';
 import { useTranslation } from './i18n/context';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import ThemeSwitcher from './components/ThemeSwitcher';
+import ApiKeySettings from './components/ApiKeySettings';
+import { hasApiKey } from './services/settingsStore';
 
 type ActiveTool = 'mask' | 'none';
 
@@ -58,6 +60,20 @@ const App: React.FC = () => {
   const [history, setHistory] = useState<GeneratedContent[]>([]);
   const [isHistoryPanelOpen, setIsHistoryPanelOpen] = useState<boolean>(false);
   const [activeCategory, setActiveCategory] = useState<Transformation | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [apiKeyConfigured, setApiKeyConfigured] = useState<boolean | null>(null);
+  
+  // Check if API key is configured on mount
+  useEffect(() => {
+    const checkApiKey = async () => {
+      const configured = await hasApiKey();
+      setApiKeyConfigured(configured);
+      if (!configured) {
+        setIsSettingsOpen(true);
+      }
+    };
+    checkApiKey();
+  }, []);
   
   useEffect(() => {
     try {
@@ -224,7 +240,7 @@ const App: React.FC = () => {
             const stepTwoResult = await editImage(stepOneImageBase64, stepOneImageMimeType, selectedTransformation.stepTwoPrompt!, null, secondaryImagePayload);
             
             if (stepTwoResult.imageUrl) {
-                stepTwoResult.imageUrl = await embedWatermark(stepTwoResult.imageUrl, "Nano Bananary｜ZHO");
+                stepTwoResult.imageUrl = await embedWatermark(stepTwoResult.imageUrl, "Nano Bananary");
             }
 
             const finalResult = { ...stepTwoResult, secondaryImageUrl: stepOneResult.imageUrl };
@@ -241,7 +257,7 @@ const App: React.FC = () => {
             setLoadingMessage(t('app.loading.default'));
             const result = await editImage(primaryBase64, primaryMimeType, promptToUse, maskBase64, secondaryImagePayload);
 
-            if (result.imageUrl) result.imageUrl = await embedWatermark(result.imageUrl, "Nano Bananary｜ZHO");
+            if (result.imageUrl) result.imageUrl = await embedWatermark(result.imageUrl, "Nano Bananary");
 
             setGeneratedContent(result);
             setHistory(prev => [result, ...prev]);
@@ -453,6 +469,16 @@ const App: React.FC = () => {
               </svg>
               <span className="hidden sm:inline">{t('app.history')}</span>
             </button>
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="flex items-center gap-2 py-2 px-3 text-sm font-semibold text-[var(--text-primary)] bg-[rgba(107,114,128,0.2)] rounded-md hover:bg-[rgba(107,114,128,0.4)] transition-colors duration-200"
+              aria-label="Settings"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+              </svg>
+              <span className="hidden sm:inline">{t('app.settings')}</span>
+            </button>
             <LanguageSwitcher />
             <ThemeSwitcher />
           </div>
@@ -569,6 +595,17 @@ const App: React.FC = () => {
         history={history}
         onUseImage={handleUseHistoryImageAsInput}
         onDownload={handleDownloadFromHistory}
+      />
+      <ApiKeySettings
+        isOpen={isSettingsOpen}
+        onClose={() => {
+          if (apiKeyConfigured) {
+            setIsSettingsOpen(false);
+          }
+        }}
+        onSave={() => {
+          setApiKeyConfigured(true);
+        }}
       />
     </div>
   );

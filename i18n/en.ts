@@ -1,6 +1,6 @@
 export default {
   app: {
-    title: "🍌 Nano Bananary｜ZHO",
+    title: "🍌 Nano Bananary",
     history: "History",
     back: "Back",
     chooseAnotherEffect: "Choose Another Effect",
@@ -8,6 +8,7 @@ export default {
     generating: "Generating...",
     result: "Result",
     yourImageWillAppear: "Your generated image will appear here.",
+    settings: "Settings",
     error: {
       uploadAndSelect: "Please upload an image and select an effect.",
       uploadBoth: "Please upload both required images.",
@@ -28,6 +29,20 @@ export default {
         switchToLight: "Switch to light theme",
         switchToDark: "Switch to dark theme"
     }
+  },
+  settings: {
+    title: "Settings",
+    apiKeyLabel: "Gemini API Key",
+    apiKeyPlaceholder: "Enter your Gemini API Key",
+    apiKeyDescription: "Your API key is stored locally and never sent to any server except Google's API.",
+    apiKeyRequired: "API Key is required to use this application.",
+    getApiKey: "Get your API key from Google AI Studio",
+    save: "Save",
+    cancel: "Cancel",
+    saved: "Settings saved successfully!",
+    error: "Failed to save settings.",
+    showKey: "Show API Key",
+    hideKey: "Hide API Key"
   },
   transformationSelector: {
     title: "Let's Go Bananas!",
