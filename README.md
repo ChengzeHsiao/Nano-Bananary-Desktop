@@ -25,20 +25,20 @@ A powerful desktop application for AI image editing and video generation, powere
 
 ### macOS (Apple Silicon)
 
-1. Download the latest DMG from [Releases](https://github.com/ChengzeHsiao/Nano-Bananary/releases)
+1. Download the latest DMG from [Releases](https://github.com/ChengzeHsiao/Nano-Bananary-Desktop.git))
 2. Open the DMG file
-3. Drag `Nano Bananary.app` to Applications folder
+3. Drag `Nano Bananary Desktop.app` to Applications folder
 4. On first launch, right-click the app and select "Open" to bypass Gatekeeper
 
 ### Build from Source
 
-**Prerequisites:**
+**Prerequisites:**  
 - Node.js 18+
 - Rust (for Tauri)
 
 ```bash
 # Clone the repository
-git clone https://github.com/ChengzeHsiao/Nano-Bananary.git
+git clone (https://github.com/ChengzeHsiao/Nano-Bananary-Desktop.git)
 cd Nano-Bananary
 
 # Install dependencies
