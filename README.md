@@ -72,5 +72,6 @@ MIT License
 
 ## Acknowledgments
 
+- **Original Project**: This project is forked from [ZHO-ZHO-ZHO/Nano-Bananary](https://github.com/ZHO-ZHO-ZHO/Nano-Bananary). Special thanks to [@ZHO-ZHO-ZHO](https://github.com/ZHO-ZHO-ZHO) for the original creative work.
 - Powered by [Google Gemini](https://gemini.google.com/)
 - Built with [Tauri](https://tauri.app/)
