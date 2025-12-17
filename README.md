@@ -39,7 +39,7 @@ A powerful desktop application for AI image editing and video generation, powere
 ```bash
 # Clone the repository
 git clone (https://github.com/ChengzeHsiao/Nano-Bananary-Desktop.git)
-cd Nano-Bananary
+cd Nano-Bananary-Desktop
 
 # Install dependencies
 npm install
