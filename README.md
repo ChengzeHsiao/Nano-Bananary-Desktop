@@ -8,6 +8,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A powerful desktop application for AI image editing and video generation, powered by Google Gemini API.
+<img width="2684" height="1908" alt="image" src="https://github.com/user-attachments/assets/ced05766-0070-4539-9a4a-4b2daa2407aa" />
+
 
 </div>
 
